@@ -1,9 +1,10 @@
-class_name LerpSmoothing
+class_name TargetFocus
 extends CameraControllerBase
 
-@export var follow_speed:float = 20
-@export var catchup_speed:float = 80
-@export var leash_distance:float = 13
+@export var lead_speed:float = 1.2 #camera speed ratio faster than vessel
+@export var catchup_speed:float = 100 #camera move back to vessel when vessel stop
+@export var leash_distance:float = 12
+@export var catchup_delay_duration:float = 0.2
 
 var vc_distance #distance btw vessel and camera
 var is_move:bool = false
@@ -16,24 +17,36 @@ func _process(delta: float) -> void:
 	if !current:
 		return
 	
+	var camera_pos = global_position
+	var vessel_pos = target.global_position
+	var camera_speed: Vector3 = Vector3(0, 0, 0)
+	
 	vc_distance = target.global_position.distance_to(global_position)
-	
 	is_move = Input.is_action_pressed("ui_left") or Input.is_action_pressed("ui_right") or Input.is_action_pressed("ui_up") or Input.is_action_pressed("ui_down")
+
+	if vc_distance <= leash_distance:
+		if is_move:
+			camera_pos.x += target.velocity.x * lead_speed * delta
+			camera_pos.z += target.velocity.z * lead_speed * delta
+			global_position = camera_pos
+			
+	elif vc_distance > leash_distance:
+		if is_move:
+			camera_pos.x += target.velocity.x * delta
+			camera_pos.z += target.velocity.z * delta
+			global_position = camera_pos
+	#set timer
+	if not is_move:
+		catchup_delay_duration -= delta
+		if catchup_delay_duration <= 0:
+			global_position = global_position.lerp(target.global_position, catchup_speed * delta / vc_distance)
+	else:
+		catchup_delay_duration = 0.2
+	print(catchup_delay_duration)
 	
 	
-	var move_speed
-	if (vc_distance <= leash_distance and is_move):
-		move_speed = follow_speed
-	elif (vc_distance > leash_distance or not is_move):
-		move_speed = catchup_speed
-	#print(global_position)
-	#print(target.global_position)
-	#print(vc_distance)
-	#print(target.velocity.length())
-	#print(move_speed)
-	#print(is_catchup)
-	var new_position = global_position.lerp(target.global_position, move_speed * delta / vc_distance)
-	global_position = new_position
+	
+	
 	
 	if draw_camera_logic:
 		draw_logic()
@@ -53,7 +66,6 @@ func draw_logic() -> void:
 	immediate_mesh.surface_add_vertex(Vector3(-2.5, 0, 0))
 	immediate_mesh.surface_add_vertex(Vector3(0, 0, 2.5))
 	immediate_mesh.surface_add_vertex(Vector3(0, 0, -2.5))
-	
 	immediate_mesh.surface_end()
 	
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
