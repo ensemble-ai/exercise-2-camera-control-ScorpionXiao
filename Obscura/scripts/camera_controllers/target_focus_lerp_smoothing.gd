@@ -18,9 +18,6 @@ func _process(delta: float) -> void:
 		return
 	
 	var camera_pos = global_position
-	var vessel_pos = target.global_position
-	var camera_speed: Vector3 = Vector3(0, 0, 0)
-	
 	vc_distance = target.global_position.distance_to(global_position)
 	is_move = Input.is_action_pressed("ui_left") or Input.is_action_pressed("ui_right") or Input.is_action_pressed("ui_up") or Input.is_action_pressed("ui_down")
 
@@ -28,24 +25,21 @@ func _process(delta: float) -> void:
 		if is_move:
 			camera_pos.x += target.velocity.x * lead_speed * delta
 			camera_pos.z += target.velocity.z * lead_speed * delta
-			global_position = camera_pos
+			#global_position = camera_pos
 			
 	elif vc_distance > leash_distance:
 		if is_move:
 			camera_pos.x += target.velocity.x * delta
 			camera_pos.z += target.velocity.z * delta
-			global_position = camera_pos
+			#global_position = camera_pos
 	#set timer
+	global_position = camera_pos
 	if not is_move:
 		catchup_delay_duration -= delta
 		if catchup_delay_duration <= 0:
 			global_position = global_position.lerp(target.global_position, catchup_speed * delta / vc_distance)
 	else:
 		catchup_delay_duration = 0.2
-	print(catchup_delay_duration)
-	
-	
-	
 	
 	
 	if draw_camera_logic:

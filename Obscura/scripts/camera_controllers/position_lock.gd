@@ -4,8 +4,7 @@ extends CameraControllerBase
 
 func _ready() -> void:
 	super()
-	if target:
-		global_position = target.global_position + Vector3(0, dist_above_target, 0)
+	global_position = target.global_position + Vector3(0, dist_above_target, 0)
 	
 
 func _process(delta: float) -> void:
@@ -16,8 +15,7 @@ func _process(delta: float) -> void:
 	if draw_camera_logic:
 		draw_logic()
 
-	if target:
-		global_position = target.global_position + Vector3(0, dist_above_target, 0)
+	global_position = target.global_position + Vector3(0, dist_above_target, 0)
 	
 	super(delta)
 	

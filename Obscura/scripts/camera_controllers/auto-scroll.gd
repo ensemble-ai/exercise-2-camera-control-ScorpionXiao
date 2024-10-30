@@ -40,17 +40,10 @@ func _process(delta: float) -> void:
 		
 	target.global_position.x += autoscroll_speed.x * delta
 	target.global_position.z += autoscroll_speed.z * delta
-	
-	#print(global_position)
-	#print(target.global_position)
-	#print(target.velocity)
-	#print(min_x)
-	#print(max_x)
-	
 		
 	if draw_camera_logic:
 		draw_logic()
-		
+	
 	super(delta)
 	
 func draw_logic() -> void:
@@ -61,21 +54,33 @@ func draw_logic() -> void:
 	mesh_instance.mesh = immediate_mesh
 	mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	
+	var box_width:float = abs(top_left.x - bottom_right.x)
+	var box_height:float = abs(top_left.y - bottom_right.y)
 	
-	#immediate_mesh.surface_begin(Mesh.PRIMITIVE_LINES, material)
-	#immediate_mesh.surface_add_vertex(Vector3(2.5, 0, 0))
-	#immediate_mesh.surface_add_vertex(Vector3(-2.5, 0, 0))
-	#immediate_mesh.surface_add_vertex(Vector3(0, 0, 2.5))
-	#immediate_mesh.surface_add_vertex(Vector3(0, 0, -2.5))
-	#
-	#immediate_mesh.surface_end()
+	var left:float = -box_width / 2
+	var right:float = box_width / 2
+	var top:float = -box_height / 2
+	var bottom:float = box_height / 2
 	
+	immediate_mesh.surface_begin(Mesh.PRIMITIVE_LINES, material)
+	immediate_mesh.surface_add_vertex(Vector3(right, 0, top))
+	immediate_mesh.surface_add_vertex(Vector3(right, 0, bottom))
+	
+	immediate_mesh.surface_add_vertex(Vector3(right, 0, bottom))
+	immediate_mesh.surface_add_vertex(Vector3(left, 0, bottom))
+	
+	immediate_mesh.surface_add_vertex(Vector3(left, 0, bottom))
+	immediate_mesh.surface_add_vertex(Vector3(left, 0, top))
+	
+	immediate_mesh.surface_add_vertex(Vector3(left, 0, top))
+	immediate_mesh.surface_add_vertex(Vector3(right, 0, top))
+	immediate_mesh.surface_end()
+
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	material.albedo_color = Color.BLACK
-	
 	add_child(mesh_instance)
 	mesh_instance.global_transform = Transform3D.IDENTITY
-	mesh_instance.global_position = Vector3(global_position.x, target.global_position.y, global_position.z)
+	mesh_instance.global_position = Vector3(frame_position.x, -10, 0)
 	
 	#mesh is freed after one update of _process
 	await get_tree().process_frame

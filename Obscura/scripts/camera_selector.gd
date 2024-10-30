@@ -6,8 +6,6 @@ var current_controller:int = 0
 
 
 func _ready():
-	print(len(cameras))
-
 	for camera in cameras:
 		if null != camera:
 			camera.current = false

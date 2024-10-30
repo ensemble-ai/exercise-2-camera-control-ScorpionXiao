@@ -9,7 +9,7 @@ Here is the document covered in class that details the type of camera controller
 
 The images in the *Exercise Stages* section are taken from Itay Keren's document.
 
-### Grading
+### Grading1
 
 Stage 1 is worth 10 points. Stages 2, 3, 4, and 5 are worth 15 points each. The stages are worth a total of 70 points. The remaining 30 points are for your peer review of another student's submission.
 

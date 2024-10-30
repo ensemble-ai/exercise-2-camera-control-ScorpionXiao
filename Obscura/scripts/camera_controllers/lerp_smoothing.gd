@@ -1,12 +1,13 @@
 class_name LerpSmoothing
 extends CameraControllerBase
 
-@export var follow_speed:float = 20
+@export var follow_speed:float = 0.6
 @export var catchup_speed:float = 80
 @export var leash_distance:float = 13
 
 var vc_distance #distance btw vessel and camera
 var is_move:bool = false
+var camera_position:Vector3
 
 func _ready() -> void:
 	super()
@@ -19,26 +20,27 @@ func _process(delta: float) -> void:
 	vc_distance = target.global_position.distance_to(global_position)
 	
 	is_move = Input.is_action_pressed("ui_left") or Input.is_action_pressed("ui_right") or Input.is_action_pressed("ui_up") or Input.is_action_pressed("ui_down")
+	var camera_pos = global_position
 	
-	
-	var move_speed
 	if (vc_distance <= leash_distance and is_move):
-		move_speed = follow_speed
+		camera_pos.x += target.velocity.x * follow_speed * delta
+		camera_pos.z += target.velocity.z * follow_speed * delta
 	elif (vc_distance > leash_distance or not is_move):
-		move_speed = catchup_speed
+		camera_pos.x += target.velocity.x * delta
+		camera_pos.z += target.velocity.z * delta
+		global_position = camera_pos
 	#print(global_position)
 	#print(target.global_position)
 	#print(vc_distance)
 	#print(target.velocity.length())
 	#print(move_speed)
 	#print(is_catchup)
-	var new_position = global_position.lerp(target.global_position, move_speed * delta / vc_distance)
-	global_position = new_position
+	global_position = global_position.lerp(target.global_position, catchup_speed * delta / vc_distance)
+
 	
 	if draw_camera_logic:
 		draw_logic()
 	super(delta)
-	
 func draw_logic() -> void:
 	var mesh_instance := MeshInstance3D.new()
 	var immediate_mesh := ImmediateMesh.new()

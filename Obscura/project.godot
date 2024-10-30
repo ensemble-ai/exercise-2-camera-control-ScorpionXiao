@@ -115,6 +115,10 @@ cycle_camera_controller={
 ]
 }
 
+[physics]
+
+common/physics_ticks_per_second=240
+
 [rendering]
 
 renderer/rendering_method="mobile"
