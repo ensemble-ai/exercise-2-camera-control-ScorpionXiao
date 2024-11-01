@@ -25,8 +25,8 @@ func _process(delta: float) -> void:
 			
 	global_position = frame_position
 	
-	#global_position = camera
-	#target.global_position = vessel
+	#global_position is camera
+	#target.global_position is vessel
 	
 	if target.global_position.x <= min_x:
 		target.global_position.x = min_x

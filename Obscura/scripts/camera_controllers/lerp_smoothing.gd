@@ -29,14 +29,8 @@ func _process(delta: float) -> void:
 		camera_pos.x += target.velocity.x * delta
 		camera_pos.z += target.velocity.z * delta
 		global_position = camera_pos
-	#print(global_position)
-	#print(target.global_position)
-	#print(vc_distance)
-	#print(target.velocity.length())
-	#print(move_speed)
-	#print(is_catchup)
-	global_position = global_position.lerp(target.global_position, catchup_speed * delta / vc_distance)
 
+	global_position = global_position.lerp(target.global_position, catchup_speed * delta / vc_distance)
 	
 	if draw_camera_logic:
 		draw_logic()

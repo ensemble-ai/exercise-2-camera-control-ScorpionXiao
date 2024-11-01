@@ -8,8 +8,8 @@ extends CameraControllerBase
 @export var speedup_zone_bottom_right:Vector2 = Vector2(6, 6)
 
 var is_touch_outer: bool = false
-var is_btw: bool = false
 var is_touch_inner:bool = false
+var is_btw: bool = false
 var is_move: bool = false
 
 var previous_position: Vector3
@@ -81,43 +81,11 @@ func _process(delta: float) -> void:
 			global_position.x += movement_direction.x * push_ratio * delta
 	if is_btw and is_move:
 		global_position += movement_direction * push_ratio * delta
-		#if inner_diff_between_left_edges < 0:
-			#global_position.x += inner_diff_between_left_edges * push_ratio * delta
-		#
-		#if inner_diff_between_right_edges > 0:
-			#global_position.x += inner_diff_between_right_edges * push_ratio * delta
-		#
-		#if inner_diff_between_top_edges < 0:
-			#global_position.z += inner_diff_between_top_edges * push_ratio * delta
-		#
-		#if inner_diff_between_bottom_edges > 0:
-			#global_position.z += inner_diff_between_bottom_edges * push_ratio * delta
-		
-	#print(is_inside_inner)
-	#print(is_touch_outer)
-	#print(is_btw)
-	#print(movement_direction)
-	
-	
-	
-	
-	#check pos in btw inner and outer
-	
-	#print(is_btw)
-	#print(target.global_position.x)
-	#print(inner_min_x)
-	
-	
-	
-	
+
 	if draw_camera_logic:
 		draw_logic()
 	super(delta)
 	
-
-
-
-
 
 func draw_logic() -> void:
 	var mesh_instance := MeshInstance3D.new()
